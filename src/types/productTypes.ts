@@ -1,12 +1,13 @@
-export interface Product {
+export interface IProduct {
   id: number;
   name: string;
   year: number;
   color: string;
+  pantone_value: string;
 }
 
-export interface ProductsState {
-  products: Product[];
+export interface IProductsState {
+  products: IProduct[];
   loading: boolean;
   error: string | null;
   currentPage: number;
@@ -16,13 +17,13 @@ export interface ProductsState {
   currentId: number | null;
 }
 
-export interface FetchProductsPayload {
+export interface IFetchProductsPayload {
   page: number;
   filterId?: string;
 }
 
-export interface FetchProductsResponse {
-  products: Product[];
+export interface IFetchProductsResponse {
+  products: IProduct[];
   totalItems: number;
   totalPages: number;
 }
