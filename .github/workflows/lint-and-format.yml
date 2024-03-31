@@ -27,10 +27,13 @@ jobs:
     - name: Run Prettier
       run: npx prettier --write .
 
-    - name: Commit changes
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Apply linting and formatting
-        branch: ${{ github.head_ref }}
-        commit_options: '--no-verify'
-        file_pattern: '.'
+    - name: Configure Git
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+
+    - name: Commit and Push Changes
+      run: |
+        git add .
+        git commit -m "Apply linting and formatting" --no-verify || echo "No changes to commit"
+        git push origin HEAD:${{ github.head_ref }}
