@@ -3,41 +3,28 @@ name: Lint and Format on PR
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
-  lint-and-format:
+  eslint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.head_ref }}
-        fetch-depth: 0
 
-    - name: Setup Node
+    - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20'
+        node-version: '14' # Możesz zaktualizować wersję Node.js zgodnie z wymaganiami projektu
 
     - name: Install Dependencies
-      run: npm ci
+      run: npm install
 
-    - name: Run Lint
-      run: npm run lint -- --fix
+    - name: Run ESLint
+      run: npx eslint . --fix
 
-    - name: Run Prettier
-      run: npx prettier --write .
-
-    - name: Configure Git
+    - name: Commit and push if there are changes
       run: |
-        git config --global user.email "daszkowskiarek145@gmail.com"
-        git config --global user.name "Arekk17"
-        git config http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n x-access-token:${{ secrets.PERSONAL_TOKEN }} | base64)"
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add -A
+        git commit -m "Automated lint fixes" -a || true
+        git push || true
 
-    - name: Commit changes
-      run: |
-        git add .
-        git commit -m "Apply linting and formatting" --no-verify || echo "No changes to commit"
-      
-    - name: Push Changes
-      run: |
-        git push https://${{ secrets.PERSONAL_TOKEN }}@github.com/${GITHUB_REPOSITORY} HEAD:${{ github.head_ref }}
