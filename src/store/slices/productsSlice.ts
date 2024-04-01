@@ -32,7 +32,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload.products;
+        const products = Array.isArray(action.payload.products)
+          ? action.payload.products
+          : [action.payload.products];
+        state.products = products;
         state.totalItems = action.payload.totalItems;
         state.totalPages = action.payload.totalPages;
       })

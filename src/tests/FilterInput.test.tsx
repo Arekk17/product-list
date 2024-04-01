@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { configureStore } from '@reduxjs/toolkit';
-import ProductFilter from '../components/Input/FilterInput';
+import { FilterInput } from '../components/Input/FilterInput';
 import productsSlice from '../store/slices/productsSlice';
 
 const store = configureStore({
@@ -16,7 +16,7 @@ describe('ProductFilter Component', () => {
   const setup = () =>
     render(
       <Provider store={store}>
-        <ProductFilter />
+        <FilterInput />
       </Provider>
     );
 
