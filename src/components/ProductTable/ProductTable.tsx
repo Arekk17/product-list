@@ -42,9 +42,6 @@ export const ProductsTable = () => {
     );
   }, [dispatch, currentPage, navigate, currentId]);
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
-
   return (
     <Box sx={{ maxWidth: '100%', overflowX: 'auto', mt: 4 }}>
       <TableContainer component={Paper} elevation={3}>
