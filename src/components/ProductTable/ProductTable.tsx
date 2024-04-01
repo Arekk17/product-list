@@ -42,6 +42,9 @@ export const ProductsTable = () => {
     );
   }, [dispatch, currentPage, navigate, currentId]);
 
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">{error}</Alert>;
+
   return (
     <Box sx={{ maxWidth: '100%', overflowX: 'auto', mt: 4 }}>
       <TableContainer component={Paper} elevation={3}>
@@ -76,7 +79,7 @@ export const ProductsTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {loading && (
+      {/* {loading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', m: 2 }}>
           <CircularProgress />
         </Box>
@@ -85,7 +88,7 @@ export const ProductsTable = () => {
         <Alert severity="error" sx={{ m: 2 }}>
           {error}
         </Alert>
-      )}
+      )} */}
       <ProductDetailsModal
         product={selectedProduct}
         open={modalOpen}
