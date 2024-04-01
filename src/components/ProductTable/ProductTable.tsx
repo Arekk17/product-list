@@ -32,6 +32,8 @@ export const ProductsTable = () => {
     setModalOpen(prevState => !prevState);
   };
 
+  const handleModalClose = () => setModalOpen(false);
+
   useEffect(() => {
     dispatch(
       fetchProducts({ page: currentPage, filterId: currentId?.toString() })
@@ -79,20 +81,10 @@ export const ProductsTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* {loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', m: 2 }}>
-          <CircularProgress />
-        </Box>
-      )}
-      {error && (
-        <Alert severity="error" sx={{ m: 2 }}>
-          {error}
-        </Alert>
-      )} */}
       <ProductDetailsModal
         product={selectedProduct}
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={handleModalClose}
       />
     </Box>
   );
