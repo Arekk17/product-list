@@ -25,7 +25,6 @@ export const fetchProducts = createAsyncThunk<
     const response = await fetch(
       `https://reqres.in/api/products?${queryParams.toString()}`
     );
-    console.log(response);
     if (!response.ok) {
       let errorMessage = 'An unknown error occurred';
       if (response.status >= 400 && response.status < 500) {
