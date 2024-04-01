@@ -68,12 +68,7 @@ export const ProductsTable = () => {
                 onClick={() => handleRowClick(product)}
                 sx={{
                   cursor: 'pointer',
-                  '&:hover': {
-                    backgroundColor: 'action.hover'
-                  },
-                  '&:nth-of-type(odd)': {
-                    backgroundColor: 'action.selected'
-                  }
+                  backgroundColor: product.color
                 }}
               >
                 <TableCell>{product.id}</TableCell>
