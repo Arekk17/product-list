@@ -57,7 +57,7 @@ export const ProductsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map(product => (
+            {products.map((product: IProduct) => (
               <TableRow
                 key={product.id}
                 onClick={() => handleRowClick(product)}

@@ -34,6 +34,7 @@ export const ProductDetailsModal: React.FC<IProductDetailsModalProps> = ({
           p: 4
         }}
       >
+        <Typography variant="h2">Product Details</Typography>
         <Typography
           id="product-details-modal-title"
           variant="h6"
