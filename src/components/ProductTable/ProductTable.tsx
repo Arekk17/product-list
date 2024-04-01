@@ -23,7 +23,6 @@ export const ProductsTable = () => {
   const { products, loading, error, currentPage, currentId } = useAppSelector(
     state => state.products
   );
-
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
