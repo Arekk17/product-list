@@ -3,7 +3,7 @@ import { setCurrentId } from '../../store/slices/productsSlice';
 import { useAppDispatch } from '../../store/store';
 import { TextField, Box } from '@mui/material';
 
-const ProductFilter = () => {
+export const FilterInput = () => {
   const [filterId, setFilterId] = useState<number | null>(null);
   const dispatch = useAppDispatch();
 
@@ -33,5 +33,3 @@ const ProductFilter = () => {
     </Box>
   );
 };
-
-export default ProductFilter;

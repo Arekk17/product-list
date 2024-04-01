@@ -31,13 +31,25 @@ export const ProductDetailsModal: React.FC<IProductDetailsModalProps> = ({
           width: 400,
           bgcolor: 'background.paper',
           boxShadow: 24,
-          p: 4
+          p: 4,
+          borderRadius: 2,
+          background: 'linear-gradient(145deg, #f3f3f3, #ededed)',
+          transition: 'box-shadow 0.3s ease-in-out',
+          '&:hover': {
+            boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)'
+          }
         }}
       >
-        <Typography variant="h2">Product Details</Typography>
+        <Typography
+          variant="h6"
+          component="h2"
+          sx={{ fontWeight: 'bold', mb: 2 }}
+        >
+          Product Details
+        </Typography>
         <Typography
           id="product-details-modal-title"
-          variant="h6"
+          variant="subtitle1"
           component="h2"
         >
           {product.name}
@@ -46,7 +58,20 @@ export const ProductDetailsModal: React.FC<IProductDetailsModalProps> = ({
           ID: {product.id}
         </Typography>
         <Typography sx={{ mt: 2 }}>Year: {product.year}</Typography>
-        <Typography sx={{ mt: 2 }}>Color: {product.color}</Typography>
+        <Typography sx={{ mt: 2 }}>
+          Color:
+          <Box
+            component="span"
+            sx={{
+              display: 'inline-block',
+              backgroundColor: product.color,
+              width: '16px',
+              height: '16px',
+              borderRadius: '50%'
+            }}
+          />{' '}
+          {product.color}
+        </Typography>
         <Typography sx={{ mt: 2 }}>
           Pantone Value: {product.pantone_value}
         </Typography>

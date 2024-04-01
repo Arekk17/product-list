@@ -46,11 +46,16 @@ export const ProductsTable = () => {
   if (error) return <Alert severity="error">{error}</Alert>;
 
   return (
-    <Box>
-      <TableContainer component={Paper}>
+    <Box sx={{ maxWidth: '100%', overflowX: 'auto', mt: 4 }}>
+      <TableContainer component={Paper} elevation={3}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
-            <TableRow>
+            <TableRow
+              sx={{
+                backgroundColor: 'primary.light',
+                '& th': { fontWeight: 'bold', color: 'primary.contrastText' }
+              }}
+            >
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Year</TableCell>
@@ -61,7 +66,15 @@ export const ProductsTable = () => {
               <TableRow
                 key={product.id}
                 onClick={() => handleRowClick(product)}
-                sx={{ cursor: 'pointer', backgroundColor: product.color }}
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    backgroundColor: 'action.hover'
+                  },
+                  '&:nth-of-type(odd)': {
+                    backgroundColor: 'action.selected'
+                  }
+                }}
               >
                 <TableCell>{product.id}</TableCell>
                 <TableCell>{product.name}</TableCell>
@@ -71,6 +84,16 @@ export const ProductsTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', m: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      {error && (
+        <Alert severity="error" sx={{ m: 2 }}>
+          {error}
+        </Alert>
+      )}
       <ProductDetailsModal
         product={selectedProduct}
         open={modalOpen}

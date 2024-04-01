@@ -5,6 +5,10 @@ import {
   IProduct,
   IProductsState
 } from '../../types/productTypes';
+interface IApiError {
+  message: string;
+  statusCode?: number;
+}
 
 export const fetchProducts = createAsyncThunk<
   IFetchProductsResponse,
@@ -40,7 +44,8 @@ export const fetchProducts = createAsyncThunk<
       totalItems: data.total,
       totalPages: data.total_pages
     };
-  } catch (error: any) {
-    return rejectWithValue(error.message || 'An unknown error occurred');
+  } catch (error) {
+    const apiError = error as IApiError;
+    return rejectWithValue(apiError.message || 'An unknown error occurred');
   }
 });

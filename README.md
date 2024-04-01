@@ -1,46 +1,65 @@
-# Getting Started with Create React App
+# Project: Product List from API
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
+This project is developed using React, TypeScript, Redux, and Material UI (MUI), based on Node.js version 20 and NPM. The aim is to create an application displaying a table of products fetched from an external API, with pagination and filtering by ID functionality.
+## System Requirements
+- Node.js (version 20)
+- NPM
+## Key Dependencies
+- React
+- TypeScript
+- Redux
+- Material UI (MUI)
+- Fetch (for API requests)
+- Jest and React test lib (for unit testing)
 
-## Available Scripts
+## Instalation
+ 1. Install Node.js (version 20).
+ 2. Clone the project repository.
+ 3. Run npm install in the project directory.
 
-In the project directory, you can run:
+# Project Structure
+```
+/product-list
+|-- /public
+|-- /src
+    |-- /components
+        |-- /Input
+            |-- FilterInput.tsx
+        |-- /Modal
+            |-- ProductDetailsModal.tsx
+        |-- /Pagination
+            |-- Pagination.tsx
+        |-- /ProductTable
+            |-- ProudctTable.tsx
+    |-- /Page
+        |-- ProductList.tsx
+    |-- /store
+        |-- /slices
+            |-- productsSlice.ts
+        |-- /thunks
+            |-- productsThunks.ts
+        |-- store.ts
+    |-- /tests
+        |-- FilterInput.test.tsx
+        |-- Pagination.test.tsx
+        |-- ProudctsTable.test.tsx
+    |-- /types
+        |-- productTypes.ts
+|-- package.json
+|-- tsconfig.json
+```
 
-### `npm start`
+## Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Redux Store Configuration**: Use `@reduxjs/toolkit` for state management.
+- **API**: Implement an API client to fetch product data. 
+- **ProductTable**: A component using Material UI for product data display with pagination and filtering options.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Running the Application
 
-### `npm test`
+To start the application, use `npm start`, accessible at the default development server address. [product-list-page](https://product-list-pearl.vercel.app/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Testing
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+For running unit tests, utilize `npm test`, leveraging Jest for correctness verification.
