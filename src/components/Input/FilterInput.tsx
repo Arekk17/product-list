@@ -1,20 +1,34 @@
-import React, { useState, useCallback } from 'react';
-import { setCurrentId } from '../../store/slices/productsSlice';
-import { useAppDispatch } from '../../store/store';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TextField, Box } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const FilterInput = () => {
   const [filterId, setFilterId] = useState('');
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getQueryId = useCallback(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return queryParams.get('id') || '';
+  }, [location.search]);
+
+  useEffect(() => {
+    setFilterId(getQueryId());
+  }, [getQueryId]);
 
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
-      const newFilterId = value === '' ? null : Number(value);
       setFilterId(value);
-      dispatch(setCurrentId(newFilterId));
+      const queryParams = new URLSearchParams(location.search);
+      if (value) {
+        queryParams.set('id', value);
+      } else {
+        queryParams.delete('id');
+      }
+      navigate(`?${queryParams.toString()}`);
     },
-    [dispatch]
+    [navigate, location.search]
   );
 
   return (
