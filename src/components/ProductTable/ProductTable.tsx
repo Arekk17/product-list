@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import {
   Alert,
@@ -16,10 +16,10 @@ import {
 import { ProductDetailsModal } from '../Modal/ProductDetailsModal';
 import { IProduct } from '../../types/productTypes';
 import { fetchProducts } from '../../store/thunks/productsThunks';
+import { setCurrentPage } from '../../store/slices/productsSlice';
 
 export const ProductsTable = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { page: urlPage, id: urlId } = useParams();
   const location = useLocation();
   const { products, loading, error, currentPage, currentId } = useAppSelector(
@@ -44,20 +44,9 @@ export const ProductsTable = () => {
       page = urlParams.get('page') ? Number(urlParams.get('page')) : page;
       id = urlParams.get('id') ? Number(urlParams.get('id')) : id;
     }
-
+    dispatch(setCurrentPage(page));
     dispatch(fetchProducts({ page, filterId: id?.toString() }));
-    navigate(`/products?page=${page}${id ? `&id=${id}` : ''}`, {
-      replace: true
-    });
-  }, [
-    dispatch,
-    navigate,
-    urlPage,
-    urlId,
-    location.search,
-    currentPage,
-    currentId
-  ]);
+  }, [dispatch, urlPage, urlId, location.search, currentPage, currentId]);
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
