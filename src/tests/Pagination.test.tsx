@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PaginationComponent } from '../components/Pagination/Pagination';
 import * as reduxHooks from '../store/store';
@@ -14,14 +14,37 @@ jest.mock('../store/store', () => ({
 }));
 
 describe('PaginationComponent Tests', () => {
-  test('renders correctly and can change pages', async () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
+  test('initially renders the correct number of page buttons', () => {
+    const totalPages = 5;
+    const mockUseAppSelector = reduxHooks.useAppSelector as jest.Mock;
+    mockUseAppSelector.mockReturnValue({ totalPages, currentPage: 1 });
+
+    render(
+      <BrowserRouter>
+        <PaginationComponent />
+      </BrowserRouter>
+    );
+    const buttons = screen.getAllByRole('button');
+    const pageNumberButtons = buttons.filter(button => {
+      const number = parseInt(button.textContent || '', 10);
+      return !isNaN(number) && number <= totalPages;
+    });
+
+    expect(pageNumberButtons).toHaveLength(totalPages);
+  });
+
+  test('navigates to the correct page when a page button is clicked', async () => {
     const mockUseAppSelector = reduxHooks.useAppSelector as jest.Mock;
     mockUseAppSelector.mockReturnValue({ totalPages: 5, currentPage: 1 });
 
     const mockNavigate = jest.fn();
-    (
-      jest.requireMock('react-router-dom').useNavigate as jest.Mock
-    ).mockReturnValue(mockNavigate);
+    jest
+      .requireMock('react-router-dom')
+      .useNavigate.mockReturnValue(mockNavigate);
 
     render(
       <BrowserRouter>
@@ -30,10 +53,14 @@ describe('PaginationComponent Tests', () => {
     );
 
     const nextPageButton = screen.getByRole('button', { name: 'Go to page 2' });
-    await userEvent.click(nextPageButton);
+    await waitFor(() => {
+      userEvent.click(nextPageButton);
+    });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/products?page=2', {
-      replace: true
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/products?page=2', {
+        replace: true
+      });
     });
   });
 });
