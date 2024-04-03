@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import {
   Alert,
@@ -16,14 +16,15 @@ import {
 import { ProductDetailsModal } from '../Modal/ProductDetailsModal';
 import { IProduct } from '../../types/productTypes';
 import { fetchProducts } from '../../store/thunks/productsThunks';
+import { setCurrentPage } from '../../store/slices/productsSlice';
 
 export const ProductsTable = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { page: urlPage, id: urlId } = useParams();
+  const location = useLocation();
   const { products, loading, error, currentPage, currentId } = useAppSelector(
     state => state.products
   );
-
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
@@ -35,14 +36,17 @@ export const ProductsTable = () => {
   const handleModalClose = () => setModalOpen(false);
 
   useEffect(() => {
-    dispatch(
-      fetchProducts({ page: currentPage, filterId: currentId?.toString() })
-    );
-    navigate(
-      `/products?page=${currentPage}${currentId ? `&id=${currentId}` : ''}`,
-      { replace: true }
-    );
-  }, [dispatch, currentPage, navigate, currentId]);
+    let page: number = Number(urlPage) || currentPage;
+    let id: number | null = Number(urlId) || currentId;
+
+    if (location.search) {
+      const urlParams = new URLSearchParams(location.search);
+      page = urlParams.get('page') ? Number(urlParams.get('page')) : page;
+      id = urlParams.get('id') ? Number(urlParams.get('id')) : id;
+    }
+    dispatch(setCurrentPage(page));
+    dispatch(fetchProducts({ page, filterId: id?.toString() }));
+  }, [dispatch, urlPage, urlId, location.search, currentPage, currentId]);
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;

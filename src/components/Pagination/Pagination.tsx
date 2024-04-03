@@ -1,14 +1,14 @@
 import React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { setCurrentPage } from '../../store/slices/productsSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useAppSelector } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 export const PaginationComponent = () => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { totalPages, currentPage } = useAppSelector(state => state.products);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
-    dispatch(setCurrentPage(value));
+    navigate(`/products?page=${value}`, { replace: true });
 
   return (
     <Stack spacing={2}>

@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
-import { setCurrentId } from '../../store/slices/productsSlice';
-import { useAppDispatch } from '../../store/store';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TextField, Box } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const FilterInput = () => {
-  const [filterId, setFilterId] = useState<number | null>(null);
-  const dispatch = useAppDispatch();
+  const [filterId, setFilterId] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (!isNaN(Number(value)) || value === '') {
-      const newFilterId = value === '' ? null : Number(value);
-      setFilterId(newFilterId);
-      dispatch(setCurrentId(newFilterId));
-    }
-  };
+  const getQueryId = useCallback(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return queryParams.get('id') || '';
+  }, [location.search]);
+
+  useEffect(() => {
+    setFilterId(getQueryId());
+  }, [getQueryId]);
+
+  const handleFilterChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setFilterId(value);
+      const queryParams = new URLSearchParams(location.search);
+      if (value) {
+        queryParams.set('id', value);
+      } else {
+        queryParams.delete('id');
+      }
+      navigate(`?${queryParams.toString()}`);
+    },
+    [navigate, location.search]
+  );
 
   return (
     <Box sx={{ m: 1, width: '25ch' }}>
       <TextField
         label="Filter by Product ID"
         variant="outlined"
-        value={filterId === null ? '' : filterId}
+        value={filterId}
         onChange={handleFilterChange}
         size="small"
         fullWidth

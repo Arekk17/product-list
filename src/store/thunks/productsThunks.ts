@@ -23,7 +23,7 @@ export const fetchProducts = createAsyncThunk<
       per_page: state.products.itemPerPage.toString()
     });
     if (filterId) {
-      queryParams.append('id', filterId.toString());
+      queryParams.append('id', filterId);
     }
 
     const response = await fetch(

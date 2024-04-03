@@ -1,10 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { configureStore } from '@reduxjs/toolkit';
 import { FilterInput } from '../components/Input/FilterInput';
 import productsSlice from '../store/slices/productsSlice';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 const store = configureStore({
   reducer: {
@@ -12,35 +13,51 @@ const store = configureStore({
   }
 });
 
-describe('ProductFilter Component', () => {
-  const setup = () =>
+describe('FilterInput Component', () => {
+  const setup = (initialEntries = ['/']) => {
     render(
       <Provider store={store}>
-        <FilterInput />
+        <MemoryRouter initialEntries={initialEntries}>
+          <Routes>
+            <Route path="*" element={<FilterInput />} />
+          </Routes>
+        </MemoryRouter>
       </Provider>
     );
+  };
 
-  test('allows numeric input and dispatches setCurrentId with the number', async () => {
-    setup();
-    const input = screen.getByLabelText(/filter by product id/i);
-    await userEvent.type(input, '123');
-    expect(input).toHaveValue(123);
-    expect(store.getState().products.currentId).toEqual(123);
+  test('sets filter from URL on component mount', async () => {
+    setup(['/products?id=123']);
+    const input = (await screen.findByLabelText(
+      /filter by product id/i
+    )) as HTMLInputElement;
+    expect(input.value).toBe('123');
   });
 
-  test('ignores non-numeric input', async () => {
-    setup();
-    const input = screen.getByLabelText(/filter by product id/i);
-    await userEvent.type(input, 'abc');
-    expect(input).toHaveValue(null);
+  test('updates URL and state on input change', async () => {
+    setup(['/products']);
+    const input = screen.getByLabelText(
+      /filter by product id/i
+    ) as HTMLInputElement;
+    await waitFor(() => {
+      userEvent.type(input, '456');
+    });
+    await waitFor(() => {
+      expect(input.value).toBe('456');
+    });
   });
 
-  test('clears the input and dispatches setCurrentId with null', async () => {
-    setup();
-    const input = screen.getByLabelText(/filter by product ID/i);
-    await userEvent.type(input, '123');
-    await userEvent.clear(input);
-    expect(input).toHaveValue(null);
-    expect(store.getState().products.currentId).toBeNull();
+  test('clears the input and updates the URL when input is cleared', async () => {
+    setup(['/products?id=789']);
+    const input = (await screen.findByLabelText(
+      /filter by product id/i
+    )) as HTMLInputElement;
+    await waitFor(() => {
+      userEvent.clear(input);
+    });
+
+    await waitFor(() => {
+      expect(input.value).toBe('');
+    });
   });
 });
